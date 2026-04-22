@@ -6,6 +6,8 @@ A reproducible Jupyter notebook pipeline to collect, process, and publish **174,
 
 **Curated by:** Dr. Yash M Gupta
 
+> **Note:** The data files (~167 MB) are not stored in this repository. The full dataset is hosted on HuggingFace — see the [Output Dataset](#output-dataset) section below.
+
 ---
 
 ## What This Does
@@ -52,10 +54,21 @@ pip install biopython tqdm lxml datasets pandas pyarrow huggingface_hub
 
 ## Usage
 
-### Option 1 — Google Colab (recommended)
+### Load the dataset directly (no collection needed)
+```python
+from datasets import load_dataset
+
+ds = load_dataset("yashm/pubmed-bioinformatics-abstracts", split="train")
+df = ds.to_pandas()
+print(f"{len(df):,} records loaded")
+```
+
+### Re-run the collection pipeline yourself
+
+#### Option 1 — Google Colab (recommended)
 Click the **Open in Colab** badge above. No local setup needed.
 
-### Option 2 — Local
+#### Option 2 — Local
 ```bash
 git clone https://github.com/yashmgupta/pubmed-bioinformatics-abstracts.git
 cd pubmed-bioinformatics-abstracts
@@ -69,6 +82,8 @@ Before running, set your credentials as environment variables (or edit Step 2 in
 export NCBI_EMAIL="your_email@example.com"
 export NCBI_API_KEY="your_ncbi_api_key"   # optional, but recommended
 ```
+
+> The collected data (~167 MB parquet) will be saved locally to `out/` and pushed to your own HuggingFace Hub repo.
 
 ---
 
@@ -94,6 +109,7 @@ PubMed (Entrez API)
 
 ## Notes
 
+- **Data is hosted on HuggingFace**, not in this repository (too large for GitHub)
 - The pipeline is **resumable** — if interrupted, re-running skips completed slices
 - NCBI rate limit: ~3 requests/sec without API key, ~10/sec with one
 - If any year has >9,999 results, the pipeline automatically splits into monthly sub-queries
